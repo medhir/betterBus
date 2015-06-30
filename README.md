@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/inverted-murmuration/project.svg)](https://travis-ci.org/inverted-murmuration/project)
+[![Build Status](https://travis-ci.org/lackadaisicalFoxtrot/betterBus.svg)](https://travis-ci.org/<your Organization name>/<your project name>)
 
 # myBus
 
@@ -7,9 +7,9 @@ arrival times for buses and trains at each station.
 
 ## Team
 
-  - __Product Owner__: Sat Khalsa
-  - __Scrum Master__: Michael Borglin
-  - __Development Team Members__: Terry Chan, Justin Fong
+  - __Product Owner__: Xue (Dani) Hu
+  - __Scrum Master__: Liam Gallivan
+  - __Development Team Members__: Medhir Bhargava, James Robinson
 
 ## Table of Contents
 
