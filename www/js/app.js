@@ -6,7 +6,8 @@ angular.module('app', [
     'app.services',
     'angular-toArrayFilter',
     'app.auth', 
-    'app.filters'
+    'app.filters', 
+    'firebase'
   ])
   /**
    * Class that begins ionic and cordova.

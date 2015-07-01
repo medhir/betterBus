@@ -298,6 +298,10 @@ angular.module('app.services', [
 
   };
 
+})
+.service('FilterService', function($firebaseArray){
+  var filtersRef = new Firebase('https://betterbus.firebaseio.com/filters');
+  return $firebaseArray(filtersRef);
 });
 
 
