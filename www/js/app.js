@@ -7,6 +7,8 @@ angular.module('app', [
     'angular-toArrayFilter',
     'app.auth',
     'app.attractions'
+    'app.filters', 
+    'firebase'
   ])
   /**
    * Class that begins ionic and cordova.
@@ -88,26 +90,39 @@ angular.module('app', [
           route: function($stateParams, RestBusService) {
             return RestBusService.getRoute($stateParams.uniqId);
           },
-          //the below needs to be fleshed out in services.js
-       
+
+          //routeDetailed: function($stateParams, RestBusService) { //this has the detailed route info, inc all stops. need prev?
+            //return RestBusService.getRouteDetailed($stateParams.uniqId);
+            ////state params etc?
+          //},
+
           userLocation: function(LocationService) {
             return LocationService.getCurrentLocation();
           }
         }
       })
-      .state('app.login', {
-        url: '/login',
+      // .state('app.login', {
+      //   url: '/login',
+      //   views: {
+      //     'menuContent': {
+      //       templateUrl: 'js/auth/login.html'
+      //     }
+      //   }
+      // })
+      // .state('app.signup', {
+      //   url: '/signup',
+      //   views: {
+      //     'menuContent': {
+      //       templateUrl: 'js/auth/signup.html'
+      //     }
+      //   }
+      // })
+      .state('app.filters', {
+        url: '/filters', 
         views: {
           'menuContent': {
-            templateUrl: 'js/auth/login.html'
-          }
-        }
-      })
-      .state('app.signup', {
-        url: '/signup',
-        views: {
-          'menuContent': {
-            templateUrl: 'js/auth/signup.html'
+            templateUrl: 'js/filter/filter.html', 
+            controller: 'FilterController'
           }
         }
       })

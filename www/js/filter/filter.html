@@ -1,0 +1,10 @@
+<!-- Filter View -->
+<ion-view view-title="Search/Add Filters">
+  <ion-content ng-controller="FilterController">
+    <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Search for Filter" ng-model='filter'>
+    </label>
+    <button class="button button-block button-energized" ng-click="addFilter()">Add Filter</button>
+  </ion-content>
+</ion-view>
