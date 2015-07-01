@@ -2,11 +2,6 @@
  * Module that contains all the services
  * @module
  */
-function randomString(length, chars) {
-  var result = '';
-  for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
-  return result;
-}
 
 angular.module('app.services', [
   'ngCordova'
@@ -42,8 +37,13 @@ angular.module('app.services', [
   };
 
 })
-.service('YelpService',function($http,$cordovaGeolocation, $ionicPlatform, $ionicPopup, $q,LocationService, ReadFileService){
+.service('YelpService',function($http,LocationService, ReadFileService){
   this.getLocalBusinesses = function(callback) {
+    function randomString(length, chars) {
+      var result = '';
+      for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+      return result;
+    }
     ReadFileService.readFile('../config.json')
     .then(function(data1){
       var auth = data1.data;
