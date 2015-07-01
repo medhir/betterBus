@@ -10,6 +10,7 @@ angular.module('app.details', [])
     
     //Called from ionic pulldown refresh
     $scope.doRefresh = function() {
+      console.log('refreshed');
       MapService.refreshUserMarker($scope.userMarker);
       MapService.refreshVehicleMarkers($scope.vehicleMarkers);
 
