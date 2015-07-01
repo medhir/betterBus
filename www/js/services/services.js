@@ -103,7 +103,6 @@ angular.module('app.services', [
         url: 'http://localhost:3000/locations/' + latlon.latitude + ',' + latlon.longitude + '/predictions',
         method: 'GET'
       }).success(function(data) {
-        console.log(data);
         routes = data;
         dfd.resolve(data);
       });
@@ -201,6 +200,11 @@ angular.module('app.services', [
     });
   };
 
+  this.getDirection = function(heading) {
+    var directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    return directions[Math.floor(heading/45)];
+  }
+
   /**
    * Creates a marker on a google maps map
    * @param {object} map - Instance to place markers on
@@ -208,16 +212,19 @@ angular.module('app.services', [
    * @param {object} loc - Object with a latitude and longitude of vehicle
    * @param {string} image - file path of image to use
    */
-  this.displayVehicle = function(map, id, loc, image) {
+  this.displayVehicle = function(map, vehicle, image) {
     var vehicleMarker = {
-      marker: this.createMarker(map, loc, image),
-        //new google.maps.Marker({
-        //position: new google.maps.LatLng(loc.latitude, loc.longitude),
-        //map: map,
-        //icon: image
-      //}),
-      id: id
+      marker: this.createMarker(map, {latitude: vehicle.lat, longitude: vehicle.lon}, image),
+      id: vehicle.id
     };
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: 'Direction: ' + this.getDirection(vehicle.heading)
+    });
+
+    google.maps.event.addListener(vehicleMarker.marker, 'click', function() {
+      infoWindow.open(map, vehicleMarker.marker);
+    });
 
     return vehicleMarker;
   };
@@ -229,7 +236,6 @@ angular.module('app.services', [
    * @param {string} image - file path of image to use
    */
   this.displayVehicles = function(map, route, image) {
-    //debugger;
     var markersArray = [];
 
     //put vehicles on map
@@ -240,8 +246,7 @@ angular.module('app.services', [
 
       for(var i = 0, len = vehicles.length; i < len; i++) {
         if(vehicles[i].routeId === routeId) {
-          var loc = {latitude: vehicles[i].lat, longitude: vehicles[i].lon};
-          markersArray.push(this.displayVehicle(map, vehicles[i].id, loc, image));
+          markersArray.push(this.displayVehicle(map, vehicles[i], image));
         }
       }
     }.bind(this));
