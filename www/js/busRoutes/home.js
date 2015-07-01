@@ -1,6 +1,6 @@
 angular.module('app.home', [])
 
-.controller('HomeController', function($scope, routes, RestBusService,YelpService) {
+.controller('HomeController', function($scope, routes, RestBusService, YelpService) {
     $scope.routes = routes;
 
 

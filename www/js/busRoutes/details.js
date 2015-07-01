@@ -1,6 +1,6 @@
 angular.module('app.details', [])
 
-  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, VehiclesService, MapService) {
+  .controller('DetailsController', function($scope, $state, route, LocationService, userLocation, RestBusService, VehiclesService, MapService) {
     $scope.route = route;
     $scope.userLocation = userLocation;
     $scope.map = MapService.createMap($scope.userLocation);
@@ -16,24 +16,14 @@ angular.module('app.details', [])
       $scope.$broadcast('scroll.refreshComplete');
     };
 
+    //this is different way to change app state than what is already present...refer to menu.html
+    //injected $state into controller in arguments list
     $scope.redirect = function(){
-      console.log('this funciton will redirect page to attractions page')
+      console.log('this function will redirect page to attractions page')
+      $state.go('app.attractions');
     }
 
-    $scope.testData = {
-      businesses : [
-        {
-          name: "childSmasher",
-          number: 4152729509,
-          location: "Marina"
-        },
-        {
-          name: "entrailDeceiever",
-          number: 4158675309,
-          location: "SoMa"
-        }
-      ]
-    }
+
 
 
     //Initial page load

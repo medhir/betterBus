@@ -5,7 +5,8 @@ angular.module('app', [
     'app.details',
     'app.services',
     'angular-toArrayFilter',
-    'app.auth'
+    'app.auth',
+    'app.attractions'
   ])
   /**
    * Class that begins ionic and cordova.
@@ -109,7 +110,17 @@ angular.module('app', [
             templateUrl: 'js/auth/signup.html'
           }
         }
-      });
+      })
+      //below is 'attractions' route
+      .state('app.attractions', {
+        url: '/attractions',
+        views: {
+          'menuContent': {
+            templateUrl: 'js/busRoutes/attractions.html',
+            controller: 'AttractionsController'
+          }
+        }
+      })
   })
   .controller('AppController', function($scope){
   })
