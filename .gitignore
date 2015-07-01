@@ -12,6 +12,5 @@ docs/
 platforms/
 plugins/
 www/lib
-
 # webstorm stuff
 .idea/workspace.xml
