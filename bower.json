@@ -7,7 +7,9 @@
   "dependencies": {
     "ngCordova": "~0.1.17-alpha",
     "angular-mocks": "~1.4.1",
-    "angular-toArrayFilter": "~1.0.0"
+    "angular-toArrayFilter": "~1.0.0",
+    "firebase": "~2.2.7",
+    "angularfire": "~1.1.2"
   },
   "resolutions": {
     "angular": "1.4.1"
