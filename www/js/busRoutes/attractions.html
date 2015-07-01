@@ -1,3 +1,10 @@
 <ion-view view-title="Test">
-	<div>test</div>
+	<ion-content class="padding">
+		<ion-item>
+			<div style="overflow-y: scroll;" ng-repeat="item in testData.businesses">
+			  <p><strong> {{ item.name }} </strong></p>
+			  <p> {{ item.number }} </p>
+			  <p> {{ item.location }} </p>
+			</div>
+		</ion-item>
 </ion-view>

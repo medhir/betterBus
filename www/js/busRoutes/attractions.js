@@ -1,7 +1,8 @@
 angular.module('app.attractions', [])
 	
 	.controller('AttractionsController', function($scope){
-		console.log('hello');
+
+		//the below data will eventually conform with the businesses data received from yelp api
 		$scope.testData = {
 		  businesses : [
 		    {
