@@ -4,11 +4,12 @@ angular.module('app.home', [])
     $scope.routes = routes;
     
     //Called from ionic pulldown refresh
+
     $scope.doRefresh = function() {
       RestBusService.getRoutes()
       .then(function(data) {
         $scope.routes = data;
       });
       $scope.$broadcast('scroll.refreshComplete');
-    }
+    };
   });
