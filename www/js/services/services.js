@@ -218,8 +218,12 @@ angular.module('app.services', [
       id: vehicle.id
     };
 
+    var direction = this.getDirection(vehicle.heading);
+    var directionContent = '<h4>Direction: ' + direction + '</h4>' +
+                           '<img src="./img/arrow/arrow_' + direction + '.png"/>';
+
     var infoWindow = new google.maps.InfoWindow({
-      content: 'Direction: ' + this.getDirection(vehicle.heading)
+      content: directionContent
     });
 
     google.maps.event.addListener(vehicleMarker.marker, 'click', function() {
