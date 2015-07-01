@@ -11,20 +11,35 @@
     </div>
     </ion-item>
 
-    <ion-item>
-    <!-- the below ng-repeats are just placeholders...will flesh out data in details.js/services.js -->
-    <div ng-repeat="info in route.attractions"> 
-      <p><strong>{{ info.stop.title }}</strong></p>
-      <div ng-repeat="attractions in info.stop">
-        <p>{{ attractions.name }}</p>
-      </div>
-    </div>
-    </ion-item>
     <!-- not sure why page fails to load when the below two lines are deleted -->
-    <ion-item style='margin: 0; padding: 0; height: 0px;'>
+    <ion-item style='margin: 0; padding: 0; height: 400px;'>
     <ion-content id='mapContainer'></ion-content>
     </ion-item>
-  </ion-content>
+
+
+
+ <ion-footer-bar class="bar-assertive">
+   <div class="buttons">
+     <button class="button" align="center" ng-click="redirect()">Attractions along your route</button>
+   </div>
+ </ion-footer-bar>
 
 
 </ion-view>
+
+<!-- align-title="left" -->
+
+<!-- the below will be put in our attractions.js -->
+<!-- 
+    <div style="overflow-y: scroll;" ng-repeat="item in testData.businesses">
+      <p><strong>
+        {{ item.name }}
+      </strong></p>
+      <p>
+        {{ item.number }}
+      </p>
+      <p>
+        {{ item.location }}
+      </p>
+    </div>
+  </ion-content> -->

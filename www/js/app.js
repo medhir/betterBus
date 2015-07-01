@@ -87,6 +87,8 @@ angular.module('app', [
           route: function($stateParams, RestBusService) {
             return RestBusService.getRoute($stateParams.uniqId);
           },
+          //the below needs to be fleshed out in services.js
+       
           userLocation: function(LocationService) {
             return LocationService.getCurrentLocation();
           }
