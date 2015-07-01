@@ -54,7 +54,6 @@ angular.module('app.services', [
       var tokenSecret = auth.oauth_token_secret; //Token Secret
       var time =new Date().getTime();
       var params = {
-              term: 'food',
               callback: 'angular.callbacks._0',
               ll: loc.latitude+','+loc.longitude,
               // location: 'San+Francisco',
