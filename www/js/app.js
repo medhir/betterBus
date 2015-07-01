@@ -87,10 +87,10 @@ angular.module('app', [
           route: function($stateParams, RestBusService) {
             return RestBusService.getRoute($stateParams.uniqId);
           },
-          routeDetailed: function($stateParams, RestBusService) { //this has the detailed route info, inc all stops. need prev?
-            //return RestBusService.getRouteDetailed($stateParams
-            //state params etc?
-          },
+          //routeDetailed: function($stateParams, RestBusService) { //this has the detailed route info, inc all stops. need prev?
+            //return RestBusService.getRouteDetailed($stateParams.uniqId);
+            ////state params etc?
+          //},
           userLocation: function(LocationService) {
             return LocationService.getCurrentLocation();
           }

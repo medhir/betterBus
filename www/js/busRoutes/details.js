@@ -1,6 +1,12 @@
 angular.module('app.details', [])
 
   .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService) {
+    RestBusService.getRouteDetailed(route.route.id)
+    .then(function(data) {
+      console.log('hi');
+      console.dir(data.stops);
+      //debugger;
+    });
     $scope.route = route;
     $scope.userLocation = userLocation;
     $scope.map = MapService.createMap($scope.userLocation);

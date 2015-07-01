@@ -86,12 +86,14 @@ angular.module('app.services', [
    */
   var routes = [];
   this.getRouteDetailed = function(route) {
-    //var dfd = $q.defer();
     return $http({
       url: 'http://localhost:3000/agencies/sf-muni/routes/'+route, //get route detailed info inc all the stops
       method: 'GET'
+    }).then(function(data) {
+      return data.data;
     });
   };
+
   this.getRoutes = function() {
     var dfd = $q.defer();
 
