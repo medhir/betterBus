@@ -5,7 +5,8 @@ angular.module('app', [
     'app.details',
     'app.services',
     'angular-toArrayFilter',
-    'app.auth', 
+    'app.auth',
+    'app.attractions',
     'app.filters', 
     'firebase'
   ])
@@ -89,10 +90,12 @@ angular.module('app', [
           route: function($stateParams, RestBusService) {
             return RestBusService.getRoute($stateParams.uniqId);
           },
+
           //routeDetailed: function($stateParams, RestBusService) { //this has the detailed route info, inc all stops. need prev?
             //return RestBusService.getRouteDetailed($stateParams.uniqId);
             ////state params etc?
           //},
+
           userLocation: function(LocationService) {
             return LocationService.getCurrentLocation();
           }
@@ -122,7 +125,17 @@ angular.module('app', [
             controller: 'FilterController'
           }
         }
-      });
+      })
+      //below is 'attractions' route
+      .state('app.attractions', {
+        url: '/attractions',
+        views: {
+          'menuContent': {
+            templateUrl: 'js/busRoutes/attractions.html',
+            controller: 'AttractionsController'
+          }
+        }
+      })
   })
   .controller('AppController', function($scope){
   })

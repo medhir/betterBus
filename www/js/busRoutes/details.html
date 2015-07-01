@@ -11,8 +11,21 @@
     </div>
     </ion-item>
 
+    <!-- not sure why page fails to load when the below two lines are deleted -->
     <ion-item style='margin: 0; padding: 0; height: 400px;'>
     <ion-content id='mapContainer'></ion-content>
     </ion-item>
-  </ion-content>
+
+
+
+ <ion-footer-bar class="bar-assertive">
+   <div class="buttons">
+     <button class="button" align="center" ng-click="redirect()">
+      Attractions along your route
+     <button>
+   </div>
+ </ion-footer-bar>
+
+
 </ion-view>
+

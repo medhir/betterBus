@@ -3,9 +3,7 @@
  * @module
  */
 
-angular.module('app.services', [
-  'ngCordova'
-])
+angular.module('app.services', ['ngCordova'])
 
 
 .service('LocationService', function($cordovaGeolocation, $ionicPlatform, $ionicPopup, $q) {
@@ -112,6 +110,12 @@ angular.module('app.services', [
 
     return dfd.promise;
   };
+
+  // this.getStops = function(){
+  //   var dfd = $q.defer();
+  //   var routes = [];
+    
+  // }
   /** 
    * Gets the route information from the route clicked on the home screen 
    * @param {string} uniqId - String from url
@@ -159,6 +163,18 @@ angular.module('app.services', [
     });
   };
 })
+
+/////--> this is the service which will pull down interest data <--\\\\\\
+
+// .service('AttractionsService', function($http){
+
+//   this.getAttractionData = function(url, method){
+//     return $http({
+//       url: url,
+//       method: method
+//     });
+//   };
+// })
 
 .service('ReadFileService', function($http) {
 
