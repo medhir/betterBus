@@ -6,7 +6,7 @@ angular.module('app', [
     'app.services',
     'angular-toArrayFilter',
     'app.auth',
-    'app.attractions'
+    'app.attractions',
     'app.filters', 
     'firebase'
   ])
