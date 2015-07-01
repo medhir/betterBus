@@ -6,14 +6,8 @@ function randomString(length, chars) {
   var result = '';
   for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
   return result;
-};
-var auth={
-  oauth_consumer_key: '9c8SJS4TqM6DPYyktYPzKg',
-  oauth_token: 'j2RczD7UCtOGX2mpTxSc-W5j96ZMrbck',
-  oauth_signature_method: "HMAC-SHA1",
-  oauth_token_secret: 'K3tXTijXjN-0IHvm19KMFDw5ZGk',
-  oauth_consumer_secret: 'LF5l1YsC8bqV6hX2Hc7mcV1Hlx8'
-};
+}
+
 angular.module('app.services', [
   'ngCordova'
 ])
@@ -48,27 +42,33 @@ angular.module('app.services', [
   };
 
 })
-.service('YelpService',function($http,$cordovaGeolocation, $ionicPlatform, $ionicPopup, $q,LocationService){
+.service('YelpService',function($http,$cordovaGeolocation, $ionicPlatform, $ionicPopup, $q,LocationService, ReadFileService){
   this.getLocalBusinesses = function(callback) {
-    LocationService.getCurrentLocation().then(function(loc){
-      var method = 'GET';
-      var url = 'http://api.yelp.com/v2/search';
-      var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
-      var tokenSecret = auth.oauth_token_secret; //Token Secret
-      var time =new Date().getTime();
-      var params = {
-              term: 'food',
-              ll: loc.latitude+','+loc.longitude,
-              oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
-              oauth_token: auth.oauth_token, //Token
-              oauth_signature_method: auth.oauth_signature_method,
-              oauth_timestamp: time,
-              oauth_version: '1.0',
-              oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-          };
-      var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: false});
-      params.oauth_signature = signature;
-      $http.jsonp(url,{params:params}).success(callback);
+    ReadFileService.readFile('../config.json')
+    .then(function(data1){
+      var auth = data1.data;
+      LocationService.getCurrentLocation().then(function(loc){
+        var method = 'GET';
+        var url = 'http://api.yelp.com/v2/search';
+        var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
+        var tokenSecret = auth.oauth_token_secret; //Token Secret
+        var time =new Date().getTime();
+        var params = {
+                term: 'food',
+                ll: loc.latitude+','+loc.longitude,
+                // location: 'San+Francisco',
+
+                oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
+                oauth_token: auth.oauth_token, //Token
+                oauth_signature_method: auth.oauth_signature_method,
+                oauth_timestamp: time,
+                oauth_version: '1.0',
+                oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            };
+        var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
+        params.oauth_signature = signature;
+        $http.jsonp(url,{params:params}).success(callback);
+      });
     });
   };
 
