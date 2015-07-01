@@ -5,8 +5,8 @@ angular.module('app.home', [])
     
     //Called from ionic pulldown refresh
     //for testing purposes
-    // YelpService.getLocalBusinesses(function(data){
-    //   console.log(JSON.stringify(data));
+    // YelpService.getLocalBusinesses({latitude:"37.789255",longitude:"-122.401225"},function(data){
+    //   console.log(data);
     // });
     $scope.doRefresh = function() {
       RestBusService.getRoutes()

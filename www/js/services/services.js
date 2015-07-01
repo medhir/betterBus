@@ -38,7 +38,8 @@ angular.module('app.services', [
 
 })
 .service('YelpService',function($http,LocationService, ReadFileService){
-  this.getLocalBusinesses = function(callback) {
+  this.getLocalBusinesses = function(loc,callback) {
+    var that= this;
     function randomString(length, chars) {
       var result = '';
       for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
@@ -47,29 +48,33 @@ angular.module('app.services', [
     ReadFileService.readFile('../config.json')
     .then(function(data1){
       var auth = data1.data;
-      LocationService.getCurrentLocation().then(function(loc){
-        var method = 'GET';
-        var url = 'http://api.yelp.com/v2/search';
-        var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
-        var tokenSecret = auth.oauth_token_secret; //Token Secret
-        var time =new Date().getTime();
-        var params = {
-                term: 'food',
-                ll: loc.latitude+','+loc.longitude,
-                // location: 'San+Francisco',
-
-                oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
-                oauth_token: auth.oauth_token, //Token
-                oauth_signature_method: auth.oauth_signature_method,
-                oauth_timestamp: time,
-                oauth_version: '1.0',
-                oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-            };
-        var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
-        params.oauth_signature = signature;
-        $http.jsonp(url,{params:params}).success(callback);
+      var method = 'GET';
+      var url = 'http://api.yelp.com/v2/search';
+      var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
+      var tokenSecret = auth.oauth_token_secret; //Token Secret
+      var time =new Date().getTime();
+      var params = {
+              term: 'food',
+              callback: 'angular.callbacks._0',
+              ll: loc.latitude+','+loc.longitude,
+              // location: 'San+Francisco',
+              oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
+              oauth_token: auth.oauth_token, //Token
+              oauth_signature_method: auth.oauth_signature_method,
+              oauth_timestamp: time,
+              oauth_version: '1.0',
+              oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+          };
+      var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
+      params.oauth_signature = signature;
+      $http.jsonp(url,{params:params}).success(function(data){
+        console.log('success on yelp');
+        that.parseData(data,callback);
       });
     });
+  };
+  this.parseData = function(data,callback) {
+    callback(data.businesses);
   };
 
 })
