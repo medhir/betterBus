@@ -5,7 +5,9 @@ angular.module('app', [
     'app.details',
     'app.services',
     'angular-toArrayFilter',
-    'app.auth'
+    'app.auth', 
+    'app.filters', 
+    'firebase'
   ])
   /**
    * Class that begins ionic and cordova.
@@ -96,19 +98,28 @@ angular.module('app', [
           }
         }
       })
-      .state('app.login', {
-        url: '/login',
+      // .state('app.login', {
+      //   url: '/login',
+      //   views: {
+      //     'menuContent': {
+      //       templateUrl: 'js/auth/login.html'
+      //     }
+      //   }
+      // })
+      // .state('app.signup', {
+      //   url: '/signup',
+      //   views: {
+      //     'menuContent': {
+      //       templateUrl: 'js/auth/signup.html'
+      //     }
+      //   }
+      // })
+      .state('app.filters', {
+        url: '/filters', 
         views: {
           'menuContent': {
-            templateUrl: 'js/auth/login.html'
-          }
-        }
-      })
-      .state('app.signup', {
-        url: '/signup',
-        views: {
-          'menuContent': {
-            templateUrl: 'js/auth/signup.html'
+            templateUrl: 'js/filter/filter.html', 
+            controller: 'FilterController'
           }
         }
       });
