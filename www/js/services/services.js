@@ -219,15 +219,27 @@ angular.module('app.services', [
     };
 
     var direction = this.getDirection(vehicle.heading);
-    var directionContent = '<h4>Direction: ' + direction + '</h4>' +
-                           '<img src="./img/arrow/arrow_' + direction + '.png"/>';
+    var directionContent = '<h4>Direction: ' + direction + '</h4>';
 
     var infoWindow = new google.maps.InfoWindow({
       content: directionContent
     });
 
+    var toggle = function() {
+      if(vehicleMarker.marker.icon === './img/bus.png') {
+        infoWindow.open(map, vehicleMarker.marker);
+        vehicleMarker.marker.icon = './img/arrow/arrow_' + direction + '.png';
+      } else {
+        vehicleMarker.marker.icon = './img/bus.png';
+        infoWindow.close();
+      }
+
+      //refresh the marker on map
+      vehicleMarker.marker.setMap(null); vehicleMarker.marker.setMap(map);
+    }
+
     google.maps.event.addListener(vehicleMarker.marker, 'click', function() {
-      infoWindow.open(map, vehicleMarker.marker);
+      toggle();
     });
 
     return vehicleMarker;
