@@ -1,16 +1,27 @@
 angular.module('app.details', [])
 
 
-  .controller('DetailsController', function($scope, $state, route, LocationService, userLocation, RestBusService, MapService, VehiclesService) {
+  .controller('DetailsController', function($scope, $state, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService) {
     RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
     .then(function(data) {
       $scope.stops = data.stops;
-      data.stops.forEach(function(stop) {
-        //omg mapservice is horribly WET
-        $scope.stopMarkers = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/stop.png');
-        //console.log(stop.lat, stop.lon);
+      $scope.stopMarkers = [];
+      data.stops.forEach(function(stop, index) {
+        //omg mapservice is horribly WET... ikr smh lolz
+        $scope.stopMarkers[index] = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/stop.png');
+
+        //create event listener
+        google.maps.event.addListener($scope.stopMarkers[index], 'click', function() {
+          debugger;
+          YelpService.getLocalBusinesses({latitude: stop.lat, longitude: stop.lon}, function(data) {
+            console.log(data);
+            var place = data[YelpService.feelingLucky(data.length)];
+            new google.maps.InfoWindow({
+              content: YelpService.formatData(place)
+            }).open($scope.map, $scope.stopMarkers[index]);
+          });
+        });
       });
-      //debugger;
     });
     $scope.route = route;
     $scope.userLocation = userLocation;

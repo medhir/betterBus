@@ -66,13 +66,28 @@ angular.module('app.services', ['ngCordova'])
       var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
       params.oauth_signature = signature;
       $http.jsonp(url,{params:params}).success(function(data){
-        console.log('success on yelp');
         that.parseData(data,callback);
       });
     });
   };
+
   this.parseData = function(data,callback) {
     callback(data.businesses);
+  };
+
+  //return random number
+  this.feelingLucky = function(length) {
+    return Math.floor(Math.random()*length);
+  };
+
+  //create info window
+  this.formatData = function(item) {
+    return '<h4>' + item.name + '</h4>' +
+           '<h5>' + item.location.address[0] + '</h5>' +
+           '<img src="' + item.image_url + '"/>' +
+           '<h5>Phone: <a href="tel:' + item.phone + '">' + item.phone + '</a></h5>' +
+           '<img src="' + item.rating_img_url_small + '"/>' +
+           '<h5>Number of Reviews: ' + item.review_count +'</h5>'
   };
 
 })
