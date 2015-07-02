@@ -66,11 +66,11 @@ angular.module('app.services', ['ngCordova'])
       var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
       params.oauth_signature = signature;
       $http.jsonp(url,{params:params}).success(function(data){
-        console.log('success on yelp');
         that.parseData(data,callback);
       });
     });
   };
+
   this.parseData = function(data,callback) {
     callback(data.businesses);
   };
