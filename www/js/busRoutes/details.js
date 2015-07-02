@@ -1,6 +1,11 @@
 angular.module('app.details', [])
 
+<<<<<<< HEAD
   .controller('DetailsController', function($scope, route, LocationService, userLocation, YelpService, RestBusService, MapService, VehiclesService) {
+=======
+
+  .controller('DetailsController', function($scope, $state, route, LocationService, userLocation, RestBusService, MapService, VehiclesService) {
+>>>>>>> 3c42e5c8081f9c6f9866dceb7de31d24692306d9
     RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
     .then(function(data) {
       $scope.stops = data.stops;
@@ -34,7 +39,24 @@ angular.module('app.details', [])
 
       $scope.$broadcast('scroll.refreshComplete');
     };
+
+    //this is different way to change app state than what is already present...refer to menu.html
+    //injected $state into controller in arguments list
+    $scope.redirect = function(){
+      console.log('this function will redirect page to attractions page')
+      $state.go('app.attractions');
+    }
+
+
+
+
     //Initial page load
     $scope.doRefresh();
 
   });
+
+
+//testStops will include mock testStops
+//mock 
+
+//need to display yelp icon

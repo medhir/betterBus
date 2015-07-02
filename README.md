@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lackadaisicalFoxtrot/betterBus.svg)](https://travis-ci.org/<your Organization name>/<your project name>)
+[![Build Status](https://travis-ci.org/lackadaisicalFoxtrot/betterBus.svg)](https://travis-ci.org/lackadaisicalFoxtrot/betterBus)
 
 # myBus
 
@@ -26,7 +26,7 @@ arrival times for buses and trains at each station.
 1. [Contributing](#contributing)
 1. [Documentation](#documentation)
 1. [Technology Stack](#technology-stack)
-
+i
 ## Getting Started
 
 ### Install Dependencies
