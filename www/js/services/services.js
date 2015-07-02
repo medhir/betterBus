@@ -114,7 +114,7 @@ angular.module('app.services', ['ngCordova'])
   this.visitStop = function(routeId, userId, stopId){
     var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/'+routeId));
     route.$loaded(function(data){
-      route[stopId].visited = true;
+      route.stopId = true;
       route.$save();
     },function(err){
       console.log('error getting route firebase');
@@ -132,7 +132,7 @@ angular.module('app.services', ['ngCordova'])
       console.log('firebase failed to pull route data');
     });
   };
-  
+
 })
 
 .service('RestBusService', function($http, $q, $ionicLoading, LocationService, ReadFileService, MapService) {
