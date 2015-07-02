@@ -12,12 +12,14 @@ angular.module('app.details', [])
 
         //create event listener
         google.maps.event.addListener($scope.stopMarkers[index], 'click', function() {
+          debugger;
           YelpService.getLocalBusinesses({latitude: stop.lat, longitude: stop.lon}, function(data) {
             console.log(data);
+            var place = data[YelpService.feelingLucky(data.length)];
+            new google.maps.InfoWindow({
+              content: YelpService.formatData(place)
+            }).open($scope.map, $scope.stopMarkers[index]);
           });
-          // new google.maps.InfoWindow({
-          //   content: YelpService.getYelpContent()
-          // }).open($scope.map, $scope.stopMarkers[index]);
         });
       });
     });
