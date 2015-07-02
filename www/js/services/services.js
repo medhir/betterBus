@@ -35,6 +35,40 @@ angular.module('app.services', ['ngCordova'])
   };
 
 })
+
+.service('FirebaseService', function($firebaseObject){
+  this.updateUserRoute= function(routeId, userId,stops){
+    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId));
+    route.$loaded(function(data){
+      route[userId] = stops;
+      route.$save();
+    },function(err){
+      console.log('error getting route firebase');
+    });
+    
+  };
+  this.visitStop = function(routeId, userId, stopId){
+    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/'+routeId));
+    route.$loaded(function(data){
+      route.stopId = true;
+      route.$save();
+    },function(err){
+      console.log('error getting route firebase');
+    });
+  };
+  this.getVisitedRoutes = function(routeId, userId){
+    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users'+userId+'/'+routeId));
+    var result = [];
+    route.$loaded(function(data){
+      for(var stopId in route){
+        result.push(stopId);
+      }
+      return result;
+    }, function(err){
+      console.log('firebase failed to pull route data');
+    });
+  };
+})
 .service('YelpService',function($http,LocationService, ReadFileService){
   this.getLocalBusinesses = function(loc,callback) {
     var that= this;

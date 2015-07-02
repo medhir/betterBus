@@ -1,8 +1,9 @@
-angular.module('app.home', [])
+  angular.module('app.home', [])
 
-.controller('HomeController', function($scope, routes, RestBusService, YelpService) {
+.controller('HomeController', function($scope, routes, RestBusService,$firebaseObject,FirebaseService) {
+    
+    
     $scope.routes = routes;
-
 
     
     //Called from ionic pulldown refresh
