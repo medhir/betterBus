@@ -4,7 +4,6 @@
     
     
     $scope.routes = routes;
-    FirebaseService.updateUserRoute('5','Liam',100);
 
     
     //Called from ionic pulldown refresh
