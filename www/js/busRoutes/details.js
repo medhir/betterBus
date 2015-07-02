@@ -1,6 +1,6 @@
 angular.module('app.details', [])
 
-  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService) {
+  .controller('DetailsController', function($scope, route, LocationService, userLocation, YelpService, RestBusService, MapService, VehiclesService) {
     RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
     .then(function(data) {
       $scope.stops = data.stops;
@@ -12,6 +12,15 @@ angular.module('app.details', [])
       //debugger;
     });
     $scope.route = route;
+    //testing for yelp
+    // RestBusService.getRouteDetailed(route.route.id)
+    // .then(function(data){
+    //   console.log(data);
+    //   YelpService.getYelpForRoute(data, function(results){
+    //     console.dir(results);
+    //   });
+    // });
+    //end testing
     $scope.userLocation = userLocation;
     $scope.map = MapService.createMap($scope.userLocation);
     $scope.userMarker = MapService.createMarker($scope.map, $scope.userLocation, './img/user.png');
