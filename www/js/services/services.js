@@ -35,71 +35,7 @@ angular.module('app.services', ['ngCordova'])
   };
 
 })
-// .service('YelpService',function($http,LocationService, ReadFileService, $q){
-//   this.getLocalBusinesses = function(loc,callback) {
-//     var that= this;
-//     function randomString(length, chars) {
-//       var result = '';
-//       for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
-//       return result;
-//     }
-//     ReadFileService.readFile('../config.json')
-//     .then(function(data1){
-//       var auth = data1.data;
-//       var method = 'GET';
-//       var url = 'http://api.yelp.com/v2/search';
-//       var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
-//       var tokenSecret = auth.oauth_token_secret; //Token Secret
-//       var time =new Date().getTime();
-//       var params = {
-//               callback: 'angular.callbacks._0',
-//               ll: loc.latitude+','+loc.longitude,
-//               limit:10,
-//               radius_filter:400,
-//               // location: 'San+Francisco',
-//               oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
-//               oauth_token: auth.oauth_token, //Token
-//               oauth_signature_method: auth.oauth_signature_method,
-//               oauth_timestamp: time,
-//               oauth_version: '1.0',
-//               oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-//           };
-//       var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
-//       params.oauth_signature = signature;
-//       $http.jsonp(url,{params:params}).success(function(data){
-//         console.log('success on yelp');
-//         that.parseData(data,callback);
-//       });
-//     });
-//   };
-//   this.parseData = function(data,callback) {
-//     callback(data.businesses);
-//   };
-//   //takes route- detailed version
-//   //returns object with keys for each stop id and values of top ten nerby yelp businesses
-//   this.getYelpForRoute = function(route, callback){
-//     var stops = route.stops;
-//     var that = this;
-//     var promiseYelp = function(loc,callback){
-//       return that.getLocalBusinesses(loc,callback);
-//     };
-//     var result = {};
-//     var promiseArr=[];
-//     angular.forEach(stops,function(stop, key, arr){
-//       var promise = promiseYelp({latitude:stop.lat,longitude:stop.lon},function(data){
-//         if(stop && stop.id){
-//           console.log(stop);
-//           result[stop.id]=data;
-//         }
-//       });
-//       promiseArr.push(promise);
-//     },this);
-//     $q.all(promiseArr).then(function(){
-//       callback(result);
-//     });
-//   };
 
-// })
 .service('FirebaseService', function($firebaseObject){
   this.updateUserRoute= function(routeId, userId,stops){
     var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId));
@@ -131,6 +67,61 @@ angular.module('app.services', ['ngCordova'])
     }, function(err){
       console.log('firebase failed to pull route data');
     });
+  };
+})
+.service('YelpService',function($http,LocationService, ReadFileService){
+  this.getLocalBusinesses = function(loc,callback) {
+    var that= this;
+    function randomString(length, chars) {
+      var result = '';
+      for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+      return result;
+    }
+    ReadFileService.readFile('../config.json')
+    .then(function(data1){
+      var auth = data1.data;
+      var method = 'GET';
+      var url = 'http://api.yelp.com/v2/search';
+      var consumerSecret = auth.oauth_consumer_secret; //Consumer Secret
+      var tokenSecret = auth.oauth_token_secret; //Token Secret
+      var time =new Date().getTime();
+      var params = {
+              term: 'food',
+              callback: 'angular.callbacks._0',
+              ll: loc.latitude+','+loc.longitude,
+              // location: 'San+Francisco',
+              oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
+              oauth_token: auth.oauth_token, //Token
+              oauth_signature_method: auth.oauth_signature_method,
+              oauth_timestamp: time,
+              oauth_version: '1.0',
+              oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+          };
+      var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
+      params.oauth_signature = signature;
+      $http.jsonp(url,{params:params}).success(function(data){
+        that.parseData(data,callback);
+      });
+    });
+  };
+
+  this.parseData = function(data,callback) {
+    callback(data.businesses);
+  };
+
+  //return random number
+  this.feelingLucky = function(length) {
+    return Math.floor(Math.random()*length);
+  };
+
+  //create info window
+  this.formatData = function(item) {
+    return '<h4>' + item.name + '</h4>' +
+           '<h5>' + item.location.address[0] + '</h5>' +
+           '<img src="' + item.image_url + '"/>' +
+           '<h5>Phone: <a href="tel:' + item.phone + '">' + item.phone + '</a></h5>' +
+           '<img src="' + item.rating_img_url_small + '"/>' +
+           '<h5>Number of Reviews: ' + item.review_count +'</h5>'
   };
 
 })
