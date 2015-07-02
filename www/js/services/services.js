@@ -100,6 +100,28 @@ angular.module('app.services', ['ngCordova'])
 //   };
 
 // })
+.service('FirebaseService', function($firebaseObject){
+  this.updateUserRoute= function(routeId, userId,stops){
+    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId));
+    route.$loaded(function(data){
+      route[userId] = stops;
+      route.$save();
+    },function(err){
+      console.log('error getting route firebase');
+    });
+    
+  };
+  this.visitStop = function(routeId, userId, stopId){
+    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/'+routeId));
+    route.$loaded(function(data){
+      route[stopId].visited = true;
+      route.$save();
+    },function(err){
+      console.log('error getting route firebase');
+    });
+  };
+
+})
 
 .service('RestBusService', function($http, $q, $ionicLoading, LocationService, ReadFileService, MapService) {
   /** 

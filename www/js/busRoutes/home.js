@@ -1,8 +1,10 @@
-angular.module('app.home', [])
+  angular.module('app.home', [])
 
-.controller('HomeController', function($scope, routes, RestBusService, YelpService) {
+.controller('HomeController', function($scope, routes, RestBusService,$firebaseObject,FirebaseService) {
+    
+    
     $scope.routes = routes;
-
+    FirebaseService.updateUserRoute('5','Liam',100);
 
     
     //Called from ionic pulldown refresh
