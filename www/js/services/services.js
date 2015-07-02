@@ -203,7 +203,7 @@ angular.module('app.services', [
   this.getDirection = function(heading) {
     var directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     return directions[Math.floor(heading/45)];
-  }
+  };
 
   /**
    * Creates a marker on a google maps map
@@ -212,6 +212,8 @@ angular.module('app.services', [
    * @param {object} loc - Object with a latitude and longitude of vehicle
    * @param {string} image - file path of image to use
    */
+
+
   this.displayVehicle = function(map, vehicle, image) {
     var vehicleMarker = {
       marker: this.createMarker(map, {latitude: vehicle.lat, longitude: vehicle.lon}, image),
