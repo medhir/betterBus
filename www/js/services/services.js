@@ -412,13 +412,17 @@ angular.module('app.services', ['ngCordova'])
       if (error) {
         console.log("Login Failed!", error);
       } else {
-        ref.child('users').child(authData.uid).set({info: 'logged in', email: authData.password.email});
+        ref.child('users').child(authData.uid).set({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
+        debugger;
+        this.userId = authData.uid; //TODO global
         cb();
       }
-    });
+    }.bind(this));
   };
-  //return $firebaseObject(ref);
+  //this.getUserId = function() {
+    //return this.userId; //TODO fix global
+  //};
 })
 .service('FilterService', function($firebaseArray){
   var filtersRef = new Firebase('https://betterbus.firebaseio.com/filters');

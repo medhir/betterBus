@@ -1,5 +1,7 @@
 angular.module('app.details', [])
-  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService) {
+  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService, SimpleAuthService) {
+    var user = SimpleAuthService.userId;
+      if (user) $scope.user = 'User: ' + user;
     RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
     .then(function(data) {
       $scope.stops = data.stops;
