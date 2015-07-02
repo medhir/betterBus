@@ -256,6 +256,12 @@ angular.module('app.services', [
     
   };
 
-});
+})
+
+.service('AuthService', function($firebaseAuth){
+  var usersRef = new Firebase('https://betterbus.firebaseio.com/users');
+  return $firebaseAuth(usersRef);
+}); 
+
 
 
