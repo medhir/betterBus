@@ -75,6 +75,21 @@ angular.module('app.services', ['ngCordova'])
     callback(data.businesses);
   };
 
+  //return random number
+  this.feelingLucky = function(length) {
+    return Math.floor(Math.random()*length);
+  };
+
+  //create info window
+  this.formatData = function(item) {
+    return '<h4>' + item.name + '</h4>' +
+           '<h5>' + item.location.address[0] + '</h5>' +
+           '<img src="' + item.image_url + '"/>' +
+           '<h5>Phone: ' + item.phone + '</h5>' +
+           '<img src="' + item.rating_img_url_small + '"/>' +
+           '<h5>Number of Reviews: ' + item.review_count +'</h5>'
+  };
+
 })
 
 .service('RestBusService', function($http, $q, $ionicLoading, LocationService, ReadFileService, MapService) {
