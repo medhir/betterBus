@@ -85,7 +85,7 @@ angular.module('app.services', ['ngCordova'])
     return '<h4>' + item.name + '</h4>' +
            '<h5>' + item.location.address[0] + '</h5>' +
            '<img src="' + item.image_url + '"/>' +
-           '<h5>Phone: ' + item.phone + '</h5>' +
+           '<h5>Phone: <a href="tel:' + item.phone + '">' + item.phone + '</a></h5>' +
            '<img src="' + item.rating_img_url_small + '"/>' +
            '<h5>Number of Reviews: ' + item.review_count +'</h5>'
   };
