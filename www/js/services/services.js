@@ -86,17 +86,17 @@ angular.module('app.services', ['ngCordova'])
       var tokenSecret = auth.oauth_token_secret; //Token Secret
       var time =new Date().getTime();
       var params = {
-              term: 'food',
-              callback: 'angular.callbacks._0',
-              ll: loc.latitude+','+loc.longitude,
-              // location: 'San+Francisco',
-              oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
-              oauth_token: auth.oauth_token, //Token
-              oauth_signature_method: auth.oauth_signature_method,
-              oauth_timestamp: time,
-              oauth_version: '1.0',
-              oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-          };
+        term: 'food',
+        callback: 'angular.callbacks._0',
+        ll: loc.latitude+','+loc.longitude,
+        // location: 'San+Francisco',
+        oauth_consumer_key: auth.oauth_consumer_key, //Consumer Key
+        oauth_token: auth.oauth_token, //Token
+        oauth_signature_method: auth.oauth_signature_method,
+        oauth_timestamp: time,
+        oauth_version: '1.0',
+        oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+      };
       var signature = oauthSignature.generate(method, url, params, consumerSecret, tokenSecret, { encodeSignature: true});
       params.oauth_signature = signature;
       $http.jsonp(url,{params:params}).success(function(data){
@@ -162,7 +162,7 @@ angular.module('app.services', ['ngCordova'])
   // this.getStops = function(){
   //   var dfd = $q.defer();
   //   var routes = [];
-    
+
   // }
   /** 
    * Gets the route information from the route clicked on the home screen 
@@ -386,6 +386,39 @@ angular.module('app.services', ['ngCordova'])
 
   };
 
+})
+.service('SimpleAuthService', function($firebaseAuth){ //for quick mockup purposes, top level firebase
+  var ref = new Firebase('https://betterbus.firebaseio.com');
+  //auth = $firebaseAuth(ref);
+  this.createUser = function(e, pw, cb) { //auth.$createUser
+    ref.createUser({
+      email    : e,
+      password : pw
+    }, function(error, userData) {
+      if (error) {
+        console.log("Error creating user:", error);
+      } else {
+        console.log("Successfully created user account with uid:", userData.uid);
+        cb();
+      }
+    });
+  };
+  this.loginUser = function(e, pw, cb) {
+    //or auth.$authWithPassword
+    ref.authWithPassword({
+      email    : e,
+      password : pw
+    }, function(error, authData) {
+      if (error) {
+        console.log("Login Failed!", error);
+      } else {
+        ref.child('users').child(authData.uid).set({info: 'logged in', email: authData.password.email});
+        console.log("Authenticated successfully with payload:", authData);
+        cb();
+      }
+    });
+  };
+  //return $firebaseObject(ref);
 })
 .service('FilterService', function($firebaseArray){
   var filtersRef = new Firebase('https://betterbus.firebaseio.com/filters');
