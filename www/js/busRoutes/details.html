@@ -2,30 +2,29 @@
   <ion-content class="padding">
     <ion-refresher on-refresh="doRefresh()" spinner="lines"></ion-refresher>
     <ion-item>
-    <h2>{{ route.route.title }}</h2>
-    <p>{{ route.stop.title }}</p>
-    <p>{{ route.stop.distance }}</p>
-    <div ng-repeat="value in route.values">
-      <p><strong>{{ value.direction.title }}</strong></p>
-      <p>{{ value.minutes }} Minutes</p>
-    </div>
+      <h2>{{ user }}</h2>
+      <h2>{{ route.route.title }}</h2>
+      <p>{{ route.stop.title }}</p>
+      <p>{{ route.stop.distance }}</p>
+      <div ng-repeat="value in route.values">
+        <p><strong>{{ value.direction.title }}</strong></p>
+        <p>{{ value.minutes }} Minutes</p>
+      </div>
     </ion-item>
 
     <!-- not sure why page fails to load when the below two lines are deleted -->
     <ion-item style='margin: 0; padding: 0; height: 400px;'>
-    <ion-content id='mapContainer'></ion-content>
+      <ion-content id='mapContainer'></ion-content>
     </ion-item>
 
+    <ion-footer-bar class="bar-assertive">
+      <div class="buttons">
+        <a ui-sref = 'app.leaderboard'><button class="button" align="center">
+            Leaderboard
+          </button>
+        </a>
+      </div>
+    </ion-footer-bar>
 
-
- <ion-footer-bar class="bar-assertive">
-   <div class="buttons">
-     <button class="button" align="center" ng-click="redirect()">
-      Attractions along your route
-     <button>
-   </div>
- </ion-footer-bar>
-
-
-</ion-view>
+  </ion-view>
 

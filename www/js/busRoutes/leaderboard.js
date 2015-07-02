@@ -1,6 +1,6 @@
-angular.module('app.attractions', [])
+angular.module('app.leaderboard', [])
 	
-	.controller('AttractionsController', function($scope){
+	.controller('LeaderboardController', function($scope){
 
 		//the below data will eventually conform with the businesses data received from yelp api
 		$scope.testData = {
