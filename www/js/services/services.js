@@ -53,7 +53,6 @@ angular.module('app.services', ['ngCordova'])
   };
 
   this.getVisitedStops = function(routeId, userId){
-    debugger;
     var stops = $firebaseArray(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId));
     return stops.$loaded(function(data){
       return data;
