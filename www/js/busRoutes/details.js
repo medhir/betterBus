@@ -1,3 +1,4 @@
+window.infoWindow=null;
 angular.module('app.details', [])
 .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService, SimpleAuthService, FirebaseService) {
   var authData = SimpleAuthService.authData;
@@ -22,7 +23,7 @@ angular.module('app.details', [])
         });
       });
     });
-  }
+  };
 
   RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
   .then(function(data) {
@@ -62,12 +63,6 @@ angular.module('app.details', [])
       } else {
         $scope.addStopMarkers(data.stops, false);
       }
-      var stopLocs = [];
-      for (var i = 0; i < data.stops.length; i++) {
-        stopLocs.push([data.stops[i].lat,data.stops[i].lon]);
-      }
-      MapService.createRouteLine(stopLocs,$scope.map);
-      google.maps.event.addDomListener(window, 'load');
     });
     //$scope.stops = data.stops;
     //_.pluck(data.stops, 
@@ -98,6 +93,27 @@ angular.module('app.details', [])
     $scope.$broadcast('scroll.refreshComplete');
   };
 
+  $scope.drawLine = function(){
+    var routeId = $scope.route.route.id;
+    $.ajax({
+      url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni&r="+routeId,
+      dataType:"xml"
+    }).done(function(xmlData){
+      var jsonData = xml.xmlToJSON(xmlData);
+      console.dir(jsonData);
+      var path = jsonData.body.route.path;
+      for(var i = 0; i< path.length; i++){
+        var point = path[i].point;
+        var stopLocs = [];
+        for (var j = 0; j < point.length; j++) {
+          stopLocs.push([point[j]['@lat'],point[j]['@lon']]);
+        }
+        MapService.createRouteLine(stopLocs,$scope.map);
+
+      }
+    });
+  };
+  $scope.drawLine();
   //Initial page load
   $scope.doRefresh();
 

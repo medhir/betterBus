@@ -245,6 +245,7 @@ angular.module('app.services', ['ngCordova'])
     var mapOptions = {center: {lat: loc.latitude, lng: loc.longitude}, zoom: 17};
     return new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
   };
+  
   //takes array of twopals lat/long and the map
   this.createRouteLine= function(locArray,map){
     var googleCoords = [];
