@@ -419,7 +419,7 @@ angular.module('app.services', ['ngCordova'])
       }
     });
   };
-  this.loginUser = function(e, pw, success, error) {
+  this.loginUser = function(e, pw, success, err) {
     //or auth.$authWithPassword
     ref.authWithPassword({
       email    : e,
@@ -427,7 +427,7 @@ angular.module('app.services', ['ngCordova'])
     }, function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
-        error();
+        err();
       } else {
         ref.child('users').child(authData.uid).set({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
