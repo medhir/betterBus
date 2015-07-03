@@ -1,8 +1,7 @@
 window.infoWindow=null;
 angular.module('app.details', [])
-  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService, SimpleAuthService) {
-    var user = SimpleAuthService.userId;
-      if (user) $scope.user = 'User: ' + user;
+  .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService, SimpleAuthService, FirebaseService) {
+    if(SimpleAuthService.authData) $scope.user = 'User: ' + SimpleAuthService.authData.password.email;
     RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
     .then(function(data) {
       $scope.stops = data.stops;
@@ -10,6 +9,9 @@ angular.module('app.details', [])
       //$scope.stops = data.stops;
       //_.pluck(data.stops,
       data.stops.forEach(function(stop, index) {
+        $scope.visitedStops = FirebaseService.getVisitedStops();
+
+        // if($scope.visitedStops.indexOf(stop.id) > -1) 
         $scope.stopMarkers[index] = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/stop.png');
 
         //create event listener
