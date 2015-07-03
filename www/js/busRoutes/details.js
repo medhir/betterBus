@@ -12,15 +12,19 @@ angular.module('app.details', [])
 
     RestBusService.getStationLocation($scope.map, route, $scope.stops, function() { //ugh refactor still needed, buncha shit together TODO but necessary this way for now
       var imgName = 'stop';
-      if (userId) FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
-      FirebaseService.getVisitedStops().then(function(stops) {
-        console.log(stops);
-        debugger;
-      });
+      if (userId) {
+        FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
+        FirebaseService.getVisitedStops().then(function(stops) {
+          console.log(stops); //incorrect TODO;
+          //debugger;
+        });
+      }
       $scope.stationMarker = MapService.createMarker($scope.map, RestBusService.closestStop.loc, './img/station.png');
+    $scope.stopMarkers = [];
 
       data.stops.forEach(function(stop, index) { //has to be inside cb to ensure isVisited set for now (deal with setVisited promise to fix)
-        if (userId && visitedStops[stop.id]) imgName = 'stopVisited';
+        //if (userId && visitedStops[stop.id]) imgName = 'stopVisited';
+        //
         //if (userId) {
           //var isVisited = FirebaseService.checkVisited(route.route.id, userId, RestBusService.closestStop.id)
           //debugger;
@@ -48,7 +52,6 @@ angular.module('app.details', [])
       MapService.createRouteLine(stopLocs,$scope.map);
       google.maps.event.addDomListener(window, 'load');
     });
-    $scope.stopMarkers = [];
     //$scope.stops = data.stops;
     //_.pluck(data.stops, 
     //debugger;
