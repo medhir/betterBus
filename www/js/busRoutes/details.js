@@ -12,11 +12,13 @@ angular.module('app.details', [])
 
     RestBusService.getStationLocation($scope.map, route, $scope.stops, function() { //ugh refactor still needed, buncha shit together TODO but necessary this way for now
       var imgName = 'stop';
-      if (userId) {
-        FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
-        FirebaseService.getVisitedStops().then(function(stops) {
-          console.log(stops); //incorrect TODO;
-          //debugger;
+      if ($scope.userId) {
+        $scope.visited = [];
+        FirebaseService.visitStop(route.route.id, $scope.userId, RestBusService.closestStop.id); //user optionally logged in
+        FirebaseService.getVisitedStops(route.route.id, $scope.userId).then(function(stops) {
+          // stops.forEach(function(stop) {
+          //   if(stop[$id])
+          }); 
         });
       }
       $scope.stationMarker = MapService.createMarker($scope.map, RestBusService.closestStop.loc, './img/station.png');
