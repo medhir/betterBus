@@ -252,6 +252,40 @@ angular.module('app.services', ['ngCordova'])
     var mapOptions = {center: {lat: loc.latitude, lng: loc.longitude}, zoom: 17};
     return new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
   };
+  //Using directions
+  //   this.createRouteLine= function(locArray,map){
+  //   console.log('trying to create route');
+  //   var wayPoints = [];
+  //   var origin = null;
+  //   var destination = null;
+  //   var directionService = new google.maps.DirectionsService();
+  //   for (var i = 0; i < locArray.length-1; i+=10) {
+  //     if(i===0){
+  //       origin = new google.maps.LatLng(locArray[i][0],locArray[i][1]);
+  //     }
+  //     else{
+  //       wayPoints.push({location:new google.maps.LatLng(locArray[i][0],locArray[i][1]),stopover:true});
+  //     }
+  //   }
+  //   destination = new google.maps.LatLng(locArray[locArray.length-1][0],locArray[locArray.length-1][1]);
+  //   var request ={
+  //     origin:origin,
+  //     destination:destination,
+  //     waypoints: wayPoints,
+  //     travelMode: google.maps.TravelMode.TRANSIT,
+  //   };
+  //   var directionsDisplay = new google.maps.DirectionsRenderer();
+  //   directionsDisplay.setMap(map);
+  //   directionService.route(request, function(result, status){
+  //     if (status == google.maps.DirectionsStatus.OK) {
+  //       directionsDisplay.setDirections(result);
+  //       console.log('created route');
+  //     }
+  //     else{
+  //       console.log('failed creating route');
+  //     }
+  //   });
+  // };
   //takes array of twopals lat/long and the map
   this.createRouteLine= function(locArray,map){
     var googleCoords = [];

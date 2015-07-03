@@ -31,12 +31,6 @@ angular.module('app.details', [])
           });
         });
       });
-      var stopLocs = [];
-      for (var i = 0; i < data.stops.length; i++) {
-        stopLocs.push([data.stops[i].lat,data.stops[i].lon]);
-      }
-      MapService.createRouteLine(stopLocs,$scope.map);
-      google.maps.event.addDomListener(window, 'load');
     });
     $scope.route = route;
     //testing for yelp
@@ -61,6 +55,27 @@ angular.module('app.details', [])
     $scope.$broadcast('scroll.refreshComplete');
   };
 
+  $scope.drawLine = function(){
+    var routeId = $scope.route.route.id;
+    $.ajax({
+      url: "http://webservices.nextbus.com/service/publicXMLFeed?command=routeConfig&a=sf-muni&r="+routeId,
+      dataType:"xml"
+    }).done(function(xmlData){
+      var jsonData = xml.xmlToJSON(xmlData);
+      console.dir(jsonData);
+      var path = jsonData.body.route.path;
+      for(var i = 0; i< path.length; i++){
+        var point = path[i].point;
+        var stopLocs = [];
+        for (var j = 0; j < point.length; j++) {
+          stopLocs.push([point[j]['@lat'],point[j]['@lon']]);
+        }
+        MapService.createRouteLine(stopLocs,$scope.map);
+
+      }
+    });
+  };
+  $scope.drawLine();
   //Initial page load
   $scope.doRefresh();
 
