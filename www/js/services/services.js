@@ -428,7 +428,6 @@ angular.module('app.services', ['ngCordova'])
       } else {
         ref.child('users').child(authData.uid).set({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
-        debugger;
         this.userId = authData.uid; //TODO global
         cb();
       }

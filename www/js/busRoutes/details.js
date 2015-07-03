@@ -1,3 +1,4 @@
+window.infoWindow=null;
 angular.module('app.details', [])
   .controller('DetailsController', function($scope, route, LocationService, userLocation, RestBusService, MapService, VehiclesService, YelpService, SimpleAuthService) {
     var user = SimpleAuthService.userId;
@@ -13,12 +14,18 @@ angular.module('app.details', [])
 
         //create event listener
         google.maps.event.addListener($scope.stopMarkers[index], 'click', function() {
+          console.log('clicked stop');
+          if(window.infoWindow){
+            window.infoWindow.close();
+            window.infoWindow = null;
+          }
           YelpService.getLocalBusinesses({latitude: stop.lat, longitude: stop.lon}, function(data) {
             console.log(data);
             var place = data[YelpService.feelingLucky(data.length)];
-            new google.maps.InfoWindow({
+            window.infoWindow = new google.maps.InfoWindow({
               content: YelpService.formatData(place)
-            }).open($scope.map, $scope.stopMarkers[index]);
+            });
+            window.infoWindow.open($scope.map, $scope.stopMarkers[index]);
           });
         });
       });
