@@ -56,7 +56,7 @@ angular.module('app.services', ['ngCordova'])
       console.log('error getting route firebase');
     });
   };
-  this.getVisitedRoutes = function(routeId, userId){
+  this.getVisitedStops = function(routeId, userId){
     var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users'+userId+'/'+routeId));
     var result = [];
     route.$loaded(function(data){
@@ -69,6 +69,8 @@ angular.module('app.services', ['ngCordova'])
     });
   };
 })
+
+
 .service('YelpService',function($http,LocationService, ReadFileService){
   this.getLocalBusinesses = function(loc,callback) {
     var that= this;
@@ -417,7 +419,7 @@ angular.module('app.services', ['ngCordova'])
       }
     });
   };
-  this.loginUser = function(e, pw, cb) {
+  this.loginUser = function(e, pw, success, error) {
     //or auth.$authWithPassword
     ref.authWithPassword({
       email    : e,
@@ -425,12 +427,13 @@ angular.module('app.services', ['ngCordova'])
     }, function(error, authData) {
       if (error) {
         console.log("Login Failed!", error);
+        error();
       } else {
         ref.child('users').child(authData.uid).set({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
         debugger;
-        this.userId = authData.uid; //TODO global
-        cb();
+        this.authData = authData;
+        success();
       }
     }.bind(this));
   };
