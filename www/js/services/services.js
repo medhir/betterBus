@@ -37,35 +37,53 @@ angular.module('app.services', ['ngCordova'])
 })
 
 .service('FirebaseService', function($firebaseObject){
-  this.updateUserRoute= function(routeId, userId,stops){
-    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId));
-    route.$loaded(function(data){
-      route[userId] = stops;
-      route.$save();
-    },function(err){
-      console.log('error getting route firebase');
-    });
-    
-  };
+  //this.update = function(routeId, userId) {
+  //var routeRef = new Firebase('https://betterbus.firebaseio.com/routes/'+routeId);
+  //var userRef = new Firebase('https://betterbus.firebaseio.com/users/'+userId);
+  //userRef.
+  //routeref.update(userId, num_stops);
+  //};
+  //this.setNumStops = function(numStops, routeId, userId){
+  //var routeUserRef = new Firebase('https://betterbus.firebaseio.com/routes/'+routeId+'/'+userId);
+  //var numStops = numStops || 0;
+  //routeUserRef.set(num_stops || 0);
+  //};
+  //routeref.update({userId: });
+  //var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId));
+  //route.$loaded(function(data){
+  //route[userId] = stops;
+  //route.$save();
+  //},function(err){
+  //console.log('error getting route firebase');
+  //});
+
   this.visitStop = function(routeId, userId, stopId){
-    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/'+routeId));
-    route.$loaded(function(data){
-      route.stopId = true;
-      route.$save();
-    },function(err){
-      console.log('error getting route firebase');
-    });
+    var userRouteStop = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId+'/'+stopId));
+    if (userRouteStop.$value) return; //already visited stop before
+    userRouteStop.$value = true;
+    userRouteStop.$save(); //TODO deal with promise 
+
+    //redundantish data but easier to find
+    var routeUser = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId+'/'+userId));
+    //val is the num stops
+    routeUser.$value = routeUser.$value || 0;
+    routeUser.$value++;
+    routeUser.$save();
   };
+
+  //this.checkVisited = function(routeId, userId, stopId) {
+    //var userRouteStop = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId+'/'+stopId));
+    //return userRouteStop.$loaded().then(function(data) { //TODO research loaded more and best prac. always load and deal with save promises?
+      //debugger;
+      //return (data.$value);
+    //});
+  //};
+
   this.getVisitedStops = function(routeId, userId){
-    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users'+userId+'/'+routeId));
-    var result = [];
-    route.$loaded(function(data){
-      for(var stopId in route){
-        result.push(stopId);
-      }
-      return result;
-    }, function(err){
-      console.log('firebase failed to pull route data');
+    debugger;
+    var stops = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId));
+    return stops.$loaded(function(data){
+      return data;
     });
   };
 })
@@ -119,11 +137,11 @@ angular.module('app.services', ['ngCordova'])
   //create info window
   this.formatData = function(item) {
     return '<h4>' + item.name + '</h4>' +
-           '<h5>' + item.location.address[0] + '</h5>' +
-           '<img src="' + item.image_url + '"/>' +
-           '<h5>Phone: <a href="tel:' + item.phone + '">' + item.phone + '</a></h5>' +
-           '<img src="' + item.rating_img_url_small + '"/>' +
-           '<h5>Number of Reviews: ' + item.review_count +'</h5>'
+      '<h5>' + item.location.address[0] + '</h5>' +
+      '<img src="' + item.image_url + '"/>' +
+      '<h5>Phone: <a href="tel:' + item.phone + '">' + item.phone + '</a></h5>' +
+      '<img src="' + item.rating_img_url_small + '"/>' +
+      '<h5>Number of Reviews: ' + item.review_count +'</h5>'
   };
 
 })
@@ -187,14 +205,17 @@ angular.module('app.services', ['ngCordova'])
    * @param {string} image - path to image file
    */
 
-  this.getStationLocation = function(map, route, image) {
-
-    ReadFileService.readFile('../stops.json')
-    .then(function(data) {
-      var station = data.data[route.stop.id];
-      var loc = {latitude: station.lat, longitude: station.lon};
-      MapService.createMarker(map, loc, image);
-    });
+  this.getStationLocation = function(map, route, stops, cb) {
+    var stop = _.find(stops, function(stop) { return stop.id === route.stop.id });
+    //debugger;
+    this.closestStop = {id: route.stop.id, loc: {latitude: stop.lat, longitude: stop.lon}};
+    //
+    //ReadFileService.readFile('../stops.json')
+    //.then(function(data) {
+    //var station = data.data[route.stop.id];
+    //this.closestStop = {id: route.stop.id, loc: {latitude: station.lat, longitude: station.lon}};
+    cb();
+    //}.bind(this));
 
   };
 
@@ -353,7 +374,7 @@ angular.module('app.services', ['ngCordova'])
 
       //refresh the marker on map
       vehicleMarker.marker.setMap(null); vehicleMarker.marker.setMap(map);
-    }
+    };
 
     google.maps.event.addListener(vehicleMarker.marker, 'click', function() {
       toggle();
@@ -386,6 +407,13 @@ angular.module('app.services', ['ngCordova'])
 
     return markersArray;
   };
+
+  //this.refreshStationMarker = function(marker){
+  //if (!marker) return;
+  //this.getStationLocation(
+  //marker.setPosition(new google.maps.LatLng(data.latitude, data.longitude));
+  //RestBusService.getStationLocation(map, route);
+  //};
 
   /**
    * refresh user marker location
@@ -431,7 +459,6 @@ angular.module('app.services', ['ngCordova'])
           vehicleMarkers[vehicles[j].id].marker.setPosition(new google.maps.LatLng(lat, lng));
         }
       }
-
     });
 
   };
@@ -463,7 +490,7 @@ angular.module('app.services', ['ngCordova'])
         console.log("Login Failed!", error);
         err();
       } else {
-        ref.child('users').child(authData.uid).set({email: authData.password.email});
+        ref.child('users').child(authData.uid).update({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
         this.authData = authData;
         success();
@@ -471,7 +498,7 @@ angular.module('app.services', ['ngCordova'])
     }.bind(this));
   };
   //this.getUserId = function() {
-    //return this.userId; //TODO fix global
+  //return this.userId; //TODO fix global
   //};
 })
 .service('FilterService', function($firebaseArray){
