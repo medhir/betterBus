@@ -7,7 +7,7 @@ angular.module('app.details', [])
       $scope.stops = data.stops;
       $scope.stopMarkers = [];
       //$scope.stops = data.stops;
-      //_.pluck(data.stops, 
+      //_.pluck(data.stops,
       data.stops.forEach(function(stop, index) {
         $scope.stopMarkers[index] = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/stop.png');
 
@@ -22,6 +22,12 @@ angular.module('app.details', [])
           });
         });
       });
+      var stopLocs = [];
+      for (var i = 0; i < data.stops.length; i++) {
+        stopLocs.push([data.stops[i].lat,data.stops[i].lon]);
+      }
+      MapService.createRouteLine(stopLocs,$scope.map);
+      google.maps.event.addDomListener(window, 'load');
     });
     $scope.route = route;
     //testing for yelp

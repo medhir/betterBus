@@ -250,7 +250,21 @@ angular.module('app.services', ['ngCordova'])
     var mapOptions = {center: {lat: loc.latitude, lng: loc.longitude}, zoom: 17};
     return new google.maps.Map(document.getElementById('mapContainer'), mapOptions);
   };
-
+  //takes array of twopals lat/long and the map
+  this.createRouteLine= function(locArray,map){
+    var googleCoords = [];
+    for (var i = 0; i < locArray.length; i++) {
+      googleCoords.push(new google.maps.LatLng(locArray[i][0],locArray[i][1]));
+    }
+    var line = new google.maps.Polyline({
+      path: googleCoords,
+      geodesic: true,
+      strokeColor: '#FF0000',
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    line.setMap(map);
+  };
   /**
    * Creates a marker on a google maps map
    * @param {object} map - Instance to place markers on
