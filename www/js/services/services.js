@@ -80,15 +80,10 @@ angular.module('app.services', ['ngCordova'])
   //};
 
   this.getVisitedStops = function(routeId, userId){
-    var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users'+userId+'/'+routeId));
-    var result = [];
-    route.$loaded(function(data){
-      for(var stopId in route){
-        result.push(stopId);
-      }
-      return result;
-    }, function(err){
-      console.log('firebase failed to pull route data');
+    debugger;
+    var stops = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId));
+    return stops.$loaded(function(data){
+      return data;
     });
   };
 })

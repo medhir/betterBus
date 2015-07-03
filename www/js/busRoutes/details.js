@@ -11,11 +11,16 @@ angular.module('app.details', [])
     $scope.stops = data.stops;
 
     RestBusService.getStationLocation($scope.map, route, $scope.stops, function() { //ugh refactor still needed, buncha shit together TODO but necessary this way for now
+      var imgName = 'stop';
       if (userId) FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
+      FirebaseService.getVisitedStops().then(function(stops) {
+        console.log(stops);
+        debugger;
+      });
       $scope.stationMarker = MapService.createMarker($scope.map, RestBusService.closestStop.loc, './img/station.png');
 
       data.stops.forEach(function(stop, index) { //has to be inside cb to ensure isVisited set for now (deal with setVisited promise to fix)
-        var imgName = 'stop';
+        if (userId && visitedStops[stop.id]) imgName = 'stopVisited';
         //if (userId) {
           //var isVisited = FirebaseService.checkVisited(route.route.id, userId, RestBusService.closestStop.id)
           //debugger;
