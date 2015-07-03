@@ -63,12 +63,6 @@ angular.module('app.details', [])
       } else {
         $scope.addStopMarkers(data.stops, false);
       }
-      var stopLocs = [];
-      for (var i = 0; i < data.stops.length; i++) {
-        stopLocs.push([data.stops[i].lat,data.stops[i].lon]);
-      }
-      MapService.createRouteLine(stopLocs,$scope.map);
-      google.maps.event.addDomListener(window, 'load');
     });
     //$scope.stops = data.stops;
     //_.pluck(data.stops, 
