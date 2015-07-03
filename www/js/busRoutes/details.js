@@ -9,24 +9,31 @@ angular.module('app.details', [])
   RestBusService.getRouteDetailed(route.route.id) //since the app.details stateparams only use the uniqId for now, it doesn't have the route info so we can't do it all in the app.js router part like they did for route
   .then(function(data) {
     $scope.stops = data.stops;
-    RestBusService.getStationLocation($scope.map, route, $scope.stops, function() {
-      $scope.stationMarker = MapService.createMarker($scope.map, RestBusService.closestStop.loc, './img/station.png');
-    });
-    $scope.stopMarkers = [];
-    //$scope.stops = data.stops;
-    //_.pluck(data.stops, 
-    debugger;
-    data.stops.forEach(function(stop, index) {
-      $scope.stopMarkers[index] = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/stop.png');
 
-      //create event listener
-      google.maps.event.addListener($scope.stopMarkers[index], 'click', function() {
-        YelpService.getLocalBusinesses({latitude: stop.lat, longitude: stop.lon}, function(data) {
-          console.log(data);
-          var place = data[YelpService.feelingLucky(data.length)];
-          new google.maps.InfoWindow({
-            content: YelpService.formatData(place)
-          }).open($scope.map, $scope.stopMarkers[index]);
+    RestBusService.getStationLocation($scope.map, route, $scope.stops, function() { //ugh refactor still needed, buncha shit together TODO but necessary this way for now
+      if (userId) FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
+      $scope.stationMarker = MapService.createMarker($scope.map, RestBusService.closestStop.loc, './img/station.png');
+
+      data.stops.forEach(function(stop, index) { //has to be inside cb to ensure isVisited set for now (deal with setVisited promise to fix)
+        var imgName = 'stop';
+        //if (userId) {
+          //var isVisited = FirebaseService.checkVisited(route.route.id, userId, RestBusService.closestStop.id)
+          //debugger;
+          //.then(function(isVisited) {
+            //if (isVisited) imgName = 'stopVisited';
+          //});
+        //}
+        $scope.stopMarkers[index] = MapService.createMarker($scope.map, {latitude: stop.lat, longitude: stop.lon}, './img/'+imgName+'.png');
+
+        //create event listener
+        google.maps.event.addListener($scope.stopMarkers[index], 'click', function() {
+          YelpService.getLocalBusinesses({latitude: stop.lat, longitude: stop.lon}, function(data) {
+            console.log(data);
+            var place = data[YelpService.feelingLucky(data.length)];
+            new google.maps.InfoWindow({
+              content: YelpService.formatData(place)
+            }).open($scope.map, $scope.stopMarkers[index]);
+          });
         });
       });
       var stopLocs = [];
@@ -36,6 +43,10 @@ angular.module('app.details', [])
       MapService.createRouteLine(stopLocs,$scope.map);
       google.maps.event.addDomListener(window, 'load');
     });
+    $scope.stopMarkers = [];
+    //$scope.stops = data.stops;
+    //_.pluck(data.stops, 
+    //debugger;
   });
   $scope.route = route;
   //testing for yelp
@@ -56,8 +67,8 @@ angular.module('app.details', [])
     //MapService.refreshStationMarker($scope.stationMarker);
     MapService.refreshUserMarker($scope.userMarker);
     MapService.refreshVehicleMarkers($scope.vehicleMarkers);
-    debugger;
-    if ($scope.userId) FirebaseService.visitStop(route.route.id, $scope.userId, RestBusService.closestStop.id); //user optionally logged in
+    //debugger;
+    //if (userId) FirebaseService.visitStop(route.route.id, userId, RestBusService.closestStop.id); //user optionally logged in
 
     $scope.$broadcast('scroll.refreshComplete');
   };

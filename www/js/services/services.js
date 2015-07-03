@@ -61,19 +61,24 @@ angular.module('app.services', ['ngCordova'])
     var userRouteStop = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId+'/'+stopId));
     if (userRouteStop.$value) return; //already visited stop before
     userRouteStop.$value = true;
-    userRouteStop.$value.$save();
+    userRouteStop.$save(); //TODO deal with promise 
+
+    //redundantish data but easier to find
     var routeUser = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/routes/'+routeId+'/'+userId));
+    //val is the num stops
     routeUser.$value = routeUser.$value || 0;
     routeUser.$value++;
-    routeUser.$value.$save();
-    //
-    //route.$loaded(function(data){
-    //route.stopId = true;
-    //route.$save();
-    //},function(err){
-    //console.log('error getting route firebase');
-    //});
+    routeUser.$save();
   };
+
+  //this.checkVisited = function(routeId, userId, stopId) {
+    //var userRouteStop = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users/'+userId+'/routes/'+routeId+'/'+stopId));
+    //return userRouteStop.$loaded().then(function(data) { //TODO research loaded more and best prac. always load and deal with save promises?
+      //debugger;
+      //return (data.$value);
+    //});
+  //};
+
   this.getVisitedStops = function(routeId, userId){
     var route = $firebaseObject(new Firebase('https://betterbus.firebaseio.com/users'+userId+'/'+routeId));
     var result = [];
@@ -207,6 +212,7 @@ angular.module('app.services', ['ngCordova'])
 
   this.getStationLocation = function(map, route, stops, cb) {
     var stop = _.find(stops, function(stop) { return stop.id === route.stop.id });
+    //debugger;
     this.closestStop = {id: route.stop.id, loc: {latitude: stop.lat, longitude: stop.lon}};
     //
     //ReadFileService.readFile('../stops.json')
@@ -455,7 +461,7 @@ angular.module('app.services', ['ngCordova'])
         console.log("Login Failed!", error);
         err();
       } else {
-        ref.child('users').child(authData.uid).set({email: authData.password.email});
+        ref.child('users').child(authData.uid).update({email: authData.password.email});
         console.log("Authenticated successfully with payload:", authData);
         this.authData = authData;
         success();
